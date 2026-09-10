@@ -61,14 +61,19 @@ Normally, svchost.exe should be spawned by services.exe. The identified process 
 
 ## 2. Parent-Child Process Analysis
 The process relationship identified was:
-``` notepad.exe (PID 2550)
+
+```
+notepad.exe (PID 2550)
         |
-        └── svchost.exe (PID 3880) ```
+        └── svchost.exe (PID 3880)
+```
 
 This relationship is highly suspicious because a legitimate svchost.exe instance is expected to be launched by services.exe.
 
 ## The abnormal:
-``` notepad.exe → svchost.exe ```
+``` 
+notepad.exe → svchost.exe
+```
 relationship indicated possible process masquerading or code injection from a user application.
 
 
