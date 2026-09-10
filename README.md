@@ -48,13 +48,14 @@ The main objectives of this investigation were to:
 
 The investigation identified:
 
-```text
+text
 Process Name: svchost.exe
 PID: 3880
 
 The process exhibited abnormal behavior and suspicious memory characteristics.
 
 Normally, svchost.exe should be spawned by services.exe. The identified process instead had an abnormal parent process.
+
 <img width="1440" height="900" alt="1(compromise)" src="https://github.com/user-attachments/assets/944b4c68-13c6-421c-9b29-d232a20a8e30" />
 
 
