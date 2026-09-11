@@ -48,7 +48,7 @@ The main objectives of this investigation were to:
 
 The investigation identified:
 
-text
+
 Process Name: svchost.exe
 PID: 3880
 
@@ -158,6 +158,100 @@ Process hollowing allows malicious activity to execute within the context of a l
 
 <img width="1297" height="915" alt="5 1" src="https://github.com/user-attachments/assets/7c145969-02b9-458a-a61c-e94ad7ad4608" />
 <img width="1297" height="915" alt="5 2" src="https://github.com/user-attachments/assets/e5d3858a-2f70-44e5-8118-f8306360476b" />
+
+
+## 🚨 Indicators of Compromise (IOCs)
+
+| Indicator                   | Type                 | Description                                       |
+| --------------------------- | -------------------- | ------------------------------------------------- |
+| `185.112.55.20`             | IP Address           | Suspicious external server / C2                   |
+| `svchost.exe` PID `3880`    | Process              | Compromised system process                        |
+| `notepad.exe → svchost.exe` | Process Relationship | Abnormal parent-child relationship                |
+| `0x400000` + `MZ` bytes     | Memory Pattern       | Evidence associated with injected executable code |
+| `PAGE_EXECUTE_READWRITE`    | Memory Protection    | Code injection indicator                          |
+
+
+## 🛠️ Investigation Approach
+
+The investigation followed a SOC-style workflow:
+```
+Alert
+  ↓
+Process Identification
+  ↓
+Parent-Child Analysis
+  ↓
+Memory Analysis
+  ↓
+Network Analysis
+  ↓
+Attack Classification
+  ↓
+IOC Identification
+  ↓
+Incident Response Recommendations
+```
+
+## 🛡️ Recommended Response Actions
+
+🔴 High Priority
+Isolate the Finance workstation from the network immediately.
+Block outbound communication to 185.112.55.20 at the firewall.
+
+🟠 Medium Priority
+Capture and analyze a full memory dump for further investigation.
+Perform additional analysis using strings and YARA.
+Check for persistence mechanisms including:
+Scheduled Tasks
+Run Keys
+WMI
+
+🟡 Low Priority
+Review other processes spawned by notepad.exe across the environment.
+
+## 📊 Evidence Summary
+
+| Investigation Area | Finding                     | Significance                      |
+| ------------------ | --------------------------- | --------------------------------- |
+| Process Tree       | `notepad.exe → svchost.exe` | Abnormal process hierarchy        |
+| Memory             | `PAGE_EXECUTE_READWRITE`    | Suspicious executable memory      |
+| Memory             | `MZ` bytes at `0x400000`    | PE executable signature in memory |
+| Network            | `185.112.55.20:443`         | Suspicious outbound communication |
+| Disk               | No malicious file detected  | Activity appears memory-resident  |
+| Classification     | T1055.012                   | Process Hollowing                 |
+
+## 🧠 Key Takeaways
+This investigation demonstrates how a compromised system can remain difficult to detect when malicious code is executed from memory rather than being stored as an obvious malicious file on disk.
+
+The investigation also demonstrates the importance of correlating multiple sources of evidence:
+
+Process relationships
+Memory artifacts
+Network connections
+Attack technique classification
+Indicators of compromise
+
+No single indicator was treated in isolation. The combination of abnormal process behavior, suspicious memory characteristics, and outbound network communication provided the basis for the final assessment.
+
+## 📚 Skills Demonstrated
+
+SOC Investigation
+Digital Forensics
+Memory Forensics
+Process Analysis
+Process Tree Analysis
+Malware Behavior Analysis
+Network Investigation
+IOC Identification
+Incident Response
+MITRE ATT&CK Mapping
+Threat Detection
+Volatility
+
+## ⚠️ Disclaimer
+This investigation was performed for cybersecurity learning and defensive analysis purposes in a controlled environment.
+
+The IP address, process information, and other indicators documented in this project are presented as investigation artifacts from the lab scenario.
 
 
 
